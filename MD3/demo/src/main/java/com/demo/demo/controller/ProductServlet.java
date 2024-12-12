@@ -204,9 +204,8 @@ public class ProductServlet extends HttpServlet {
     private void showUpdateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
 
-
-        String product_name = req.getParameter("product_name");
-        Optional<Product> checkProduct = iProductService.findProductByName(product_name);
+        String productName = req.getParameter("productName");
+        Optional<Product> checkProduct = iProductService.findProductByName(productName);
         if (checkProduct.isEmpty()) {
             session.setAttribute("errorMessage", "Sản phẩm không tồn tại!");
             resp.sendRedirect(req.getContextPath() + "/product?action=listProducts");

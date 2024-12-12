@@ -5,13 +5,15 @@
 <html>
 <head>
   <title>Update Product</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <!-- Gọi toast -->
 <jsp:include page="../../common/toast.jsp" />
 
 <form action="${pageContext.request.contextPath}/product?action=updateProduct" method="post" style="margin-top: 4rem">
-  <input type="hidden" name="product_id" value="${product.product_id}">
+  <input type="hidden" name="productID" value="${product.productID}">
   <div class="mb-3">
     <label for="productName" class="form-label">Tên Sản phẩm</label>
     <input type="text" id="productName" name="productName" class="form-control" value="${productName != null ? productName : product.productName}">
@@ -56,6 +58,9 @@
     </a>
   </div>
 </form>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
