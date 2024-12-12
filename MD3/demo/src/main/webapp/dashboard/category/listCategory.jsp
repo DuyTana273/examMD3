@@ -2,16 +2,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="true" %>
 
-<!-- Kiểm tra người dùng đã đăng nhập chưa -->
-<c:if test="${empty sessionScope.loggedInUser}">
-    <c:redirect url="${pageContext.request.contextPath}/login" />
-</c:if>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh sách người dùng</title>
+    <title>Danh Mục Các Nhãn Hàng</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,31 +21,28 @@
 
 </head>
 <body>
-<%--<!-- Gọi sidebar -->--%>
-<%--<jsp:include page="../../common/sidebar.jsp" />--%>
 <!-- Gọi toast -->
 <jsp:include page="../../common/toast.jsp" />
 
-
-<div class="main-container" style="margin-top: 4rem">
+<div class="main-content">
     <div class="row">
         <!-- Main content -->
         <main class="fade-in" id="page-title">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Danh Sách Người Dùng</h1>
+                <h1 class="h2">Danh Sách Các Nhãn Hàng</h1>
             </div>
 
             <!-- Button Thêm Người Dùng -->
-            <a href="${pageContext.request.contextPath}/users?action=createUser" class="btn btn-success btn-md mb-3">
-                <i class="fas fa-user-plus"></i> Thêm Người Dùng
+            <a href="${pageContext.request.contextPath}/category?action=createCategories" class="btn btn-success btn-md mb-3">
+                <i class="fas fa-plus-circle"></i> Thêm Nhãn Hàng
             </a>
 
             <%-- Search --%>
-            <form action="${pageContext.request.contextPath}/users?action=listUsers" method="get">
+            <form action="${pageContext.request.contextPath}/categories?action=listCategories" method="get">
                 <div class="input-group" style="max-width: 500px;">
-                    <input type="text" class="form-control" id="searchUser" name="searchUser"
-                           placeholder="Nhập thông tin người dùng"
-                           value="${param.searchUser}"
+                    <input type="text" class="form-control" id="searchCategoryName" name="searchCategoryName"
+                           placeholder="Nhập tên nhãn hàng"
+                           value="${param.searchCategoryName}"
                            aria-label="Tìm người dùng">
 
                     <button class="btn btn-primary" type="submit">
@@ -58,8 +50,8 @@
                     </button>
 
                     <!-- Nút quay lại nếu có tìm kiếm -->
-                    <c:if test="${not empty param.searchUser}">
-                        <a href="${pageContext.request.contextPath}/users?action=listUsers"
+                    <c:if test="${not empty param.searchCategoryName}">
+                        <a href="${pageContext.request.contextPath}/categories?action=listCategories"
                            class="btn btn-secondary ms-2">
                             <i class="fas fa-arrow-left"></i> Quay lại
                         </a>
@@ -72,42 +64,23 @@
                     <thead>
                     <tr>
                         <th>STT</th>
-                        <th>Tài khoản</th>
-                        <th>Tên</th>
-                        <th>Role</th>
+                        <th>Tên Nhãn Hàng</th>
                         <th>Hành động</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="user" items="${listUsers}" varStatus="loop">
+                    <c:forEach var="categories" items="${listCategories}" varStatus="loop">
                         <tr>
                             <td>${loop.count}</td>
-                            <td>${user.username}</td>
-                            <td>${user.fullName}</td>
+                            <td>${categories.categories_name}</td>
                             <td>
-                      <span class="badge rounded-pill
-                          <c:choose>
-                              <c:when test="${user.userRole == 'admin'}">bg-danger</c:when>
-                              <c:when test="${user.userRole == 'manager'}">bg-warning</c:when>
-                              <c:when test="${user.userRole == 'employee'}">bg-primary</c:when>
-                              <c:otherwise>bg-success</c:otherwise>
-                          </c:choose>
-                       fs-6 px-2 py-1">
-                              ${user.userRole}
-                      </span>
-                            </td>
-                            <td>
-                                <a href="/users?action=viewUser&username=${user.username}" class="btn btn-primary btn-sm me-1">
-                                    <i class="fas fa-eye"></i> Xem
-                                </a>
-
-                                <a href="${pageContext.request.contextPath}/users?action=updateUser&username=${user.username}" class="btn btn-secondary btn-sm me-1">
+                                <a href="${pageContext.request.contextPath}/categories?action=updateCategories&categories_name=${categories.categories_name}" class="btn btn-secondary btn-sm me-1">
                                     <i class="fas fa-pen"></i> Sửa
                                 </a>
 
                                 <!-- Nút Xóa, hiển thị Modal -->
                                 <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                                        data-username="${user.username}">
+                                        data-categories_name="${categories.categories_name}">
                                     <i class="fas fa-trash-alt"></i> Xóa
                                 </button>
 
@@ -126,19 +99,19 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Xác Nhận Xóa Người Dùng</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Xác Nhận Xóa Thương Hiệu</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Bạn có chắc chắn muốn xóa người dùng <strong id="usernameDisplay"></strong>  không?
+                Bạn có chắc chắn muốn xóa thương hiệu <strong id="categoryDisplay"></strong> không?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
 
                 <!-- Form xóa người dùng -->
-                <form id="deleteUserForm" action="${pageContext.request.contextPath}/users?action=deleteUser" method="post" style="display:inline;">
-                    <input type="hidden" name="action" value="deleteUser">
-                    <input type="hidden" name="username" id="usernameToDelete">
+                <form id="deleteCategoryForm" action="${pageContext.request.contextPath}/categories?action=deleteCategories" method="post" style="display:inline;">
+                    <input type="hidden" name="action" value="deleteCategories">
+                    <input type="hidden" name="categories_name" id="categoriesToDelete">
                     <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
                 </form>
             </div>
@@ -151,10 +124,9 @@
     var deleteButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
     deleteButtons.forEach(function(button) {
         button.addEventListener('click', function() {
-            var username = button.getAttribute('data-username');
-            document.getElementById('usernameToDelete').value = username;
-            document.getElementById('usernameDisplay').textContent = username;
-            document.getElementById('usernameToDelete').value = username;
+            var categories_name = button.getAttribute('data-categories_name');
+            document.getElementById('categoryDisplay').textContent = categories_name;
+            document.getElementById('categoriesToDelete').value = categories_name;
         });
     });
 </script>

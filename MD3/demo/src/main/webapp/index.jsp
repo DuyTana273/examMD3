@@ -8,6 +8,6 @@
     <h1><%= "Hello World!" %>
     </h1>
     <br/>
-    <a href="login.jsp">Login</a>
+    <a href="${pageContext.request.contextPath}/product?action=listProducts">DashBoard Sản Phẩm</a>
 </body>
 </html>
