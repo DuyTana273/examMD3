@@ -34,9 +34,17 @@
     <input type="number" id="productStock" name="productStock" class="form-control" value="${productStock != null ? productStock : product.productStock}">
   </div>
 
+
+  <c:set var="selectedColor" value="${not empty productColor ? productColor : product.productColor}" />
   <div class="mb-3">
     <label for="productColor" class="form-label">Màu</label>
-    <input type="text" id="productColor" name="productColor" class="form-control" value="${productColor != null ? productColor : product.productColor}">
+    <select id="productColor" name="productColor" class="form-control">
+      <option value="Đỏ" <c:if test="${selectedColor eq 'Đỏ'}">selected="selected"</c:if>>Đỏ</option>
+      <option value="Đen" <c:if test="${selectedColor eq 'Đen'}">selected="selected"</c:if>>Đen</option>
+      <option value="Xanh" <c:if test="${selectedColor eq 'Xanh'}">selected="selected"</c:if>>Xanh</option>
+      <option value="Trắng" <c:if test="${selectedColor eq 'Trắng'}">selected="selected"</c:if>>Trắng</option>
+      <option value="Vàng" <c:if test="${selectedColor eq 'Vàng'}">selected="selected"</c:if>>Vàng</option>
+    </select>
   </div>
 
   <div class="mb-3">
